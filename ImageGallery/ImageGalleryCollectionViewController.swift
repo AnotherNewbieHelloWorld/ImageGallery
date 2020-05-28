@@ -29,32 +29,31 @@ class ImageGalleryCollectionViewController: UICollectionViewController, UICollec
         }
     }
     
-    @IBAction func save(_ sender: UIBarButtonItem) {
-        if let json = imageGallery?.json {
-            if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("UntitledIG.json") {
-                do {
-                    try json.write(to: url)
-                    print("saved successfully!")
-                } catch let error {
-                    print("couldn't save \(error)")
-                }
-            }
-//            if let jsonString = String(data: json, encoding: .utf8) {
-//                print(jsonString )
-//            }
+    var document: ImageGalleryDocument?
+    
+    @IBAction func save(_ sender: UIBarButtonItem? = nil) {
+        /** Autosave! Not Save Button **/
+        document?.imageGallery = imageGallery
+        if document?.imageGallery != nil {
+            document?.updateChangeCount(.done)
         }
     }
     
     @IBAction func close(_ sender: UIBarButtonItem) {
+        save()
+        dismiss(animated: true) {
+            self.document?.close()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if let url = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appendingPathComponent("UntitledIG.json") {
-            if let jsonData = try? Data(contentsOf: url) {
-                imageGallery = ImageGalleryDoc(json: jsonData)
+        document?.open(completionHandler: { success in
+            if success {
+                self.title = self.document?.localizedName
+                self.imageGallery = self.document?.imageGallery
             }
-        }
+        })
     }
     
     // MARK: - Storyboard
