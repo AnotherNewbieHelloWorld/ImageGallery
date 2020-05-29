@@ -11,7 +11,6 @@ import Foundation
 struct ImageModel: Codable {
     var url: URL
     var ascpectRatio: Double
-    var image: Data
 }
 
 class ImageGalleryModel {

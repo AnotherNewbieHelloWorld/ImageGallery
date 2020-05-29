@@ -64,6 +64,7 @@ class ImageGalleryCollectionViewController: UICollectionViewController, UICollec
         super.viewDidLoad()
         collectionView.dropDelegate = self
         collectionView.dragDelegate = self
+        collectionView.dragInteractionEnabled = true
         collectionView.addGestureRecognizer(UIPinchGestureRecognizer(target: self, action: #selector(ImageGalleryCollectionViewController.zoom(_:))))
         
         navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem
@@ -209,15 +210,12 @@ class ImageGalleryCollectionViewController: UICollectionViewController, UICollec
                 
                 var optionalImageURL: URL?
                 var optionalAspectRatio: Double?
-                var optionalImageData: Data?
                 
                 // load image
                 item.dragItem.itemProvider.loadObject(ofClass: UIImage.self) { (image, error) in
                     DispatchQueue.main.async {
-                        if let image = image as? UIImage, let data = image.pngData() {
+                        if let image = image as? UIImage {
                             optionalAspectRatio = Double(image.size.width)/Double(image.size.height)
-                            /** Need to cash image **/
-                            optionalImageData = data
                         }
                     }
                 }
@@ -228,13 +226,11 @@ class ImageGalleryCollectionViewController: UICollectionViewController, UICollec
                         if let url = nsurl as? URL {
                             optionalImageURL = url.imageURL
                         }
-                        if optionalImageURL != nil,
-                            optionalAspectRatio != nil,
-                            optionalImageData != nil {
+                        if optionalImageURL != nil, optionalAspectRatio != nil{
                             
                             placeholderContext.commitInsertion(dataSourceUpdates: {
                                 insertionIndexPath in
-                                self.imageGalleryModel.images.insert(ImageModel(url: optionalImageURL!, ascpectRatio: optionalAspectRatio!, image: optionalImageData!), at: insertionIndexPath.item)
+                                self.imageGalleryModel.images.insert(ImageModel(url: optionalImageURL!, ascpectRatio: optionalAspectRatio!), at: insertionIndexPath.item)
                             })
                         } else {
                             print(error?.localizedDescription ?? "Error")
