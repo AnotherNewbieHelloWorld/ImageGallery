@@ -31,7 +31,7 @@ class ImageGalleryCollectionViewController: UICollectionViewController, UICollec
     
     var document: ImageGalleryDocument?
     
-    @IBAction func save(_ sender: UIBarButtonItem? = nil) {
+    func documentChanged() {
         /** Autosave! Not Save Button **/
         document?.imageGallery = imageGallery
         if document?.imageGallery != nil {
@@ -40,7 +40,6 @@ class ImageGalleryCollectionViewController: UICollectionViewController, UICollec
     }
     
     @IBAction func close(_ sender: UIBarButtonItem) {
-        save()
         dismiss(animated: true) {
             self.document?.close()
         }
@@ -203,6 +202,7 @@ class ImageGalleryCollectionViewController: UICollectionViewController, UICollec
                          collectionView.insertItems(at: [destinationIndexPath])
                     })
                     coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
+                    self.documentChanged()
                 }
             } else {
                 // handle the drop from the other app
@@ -232,6 +232,7 @@ class ImageGalleryCollectionViewController: UICollectionViewController, UICollec
                                 insertionIndexPath in
                                 self.imageGalleryModel.images.insert(ImageModel(url: optionalImageURL!, ascpectRatio: optionalAspectRatio!), at: insertionIndexPath.item)
                             })
+                            self.documentChanged()
                         } else {
                             print(error?.localizedDescription ?? "Error")
                             placeholderContext.deletePlaceholder()
