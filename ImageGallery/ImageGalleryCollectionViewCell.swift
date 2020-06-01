@@ -69,6 +69,7 @@ extension UIImageView {
                         cache.storeCachedResponse(cachedData, for: request)
                         DispatchQueue.main.async {
                             self.transition(toImage: image)
+                            if complitionHandler != nil { complitionHandler!() }
                         }
                     }
                 }.resume()

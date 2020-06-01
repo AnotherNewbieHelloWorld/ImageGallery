@@ -31,6 +31,10 @@ class ImageGalleryCollectionViewController: UICollectionViewController, UICollec
     
     var document: ImageGalleryDocument?
     
+    var firstImage: UIImageView? {
+        return (self.collectionView!.cellForItem(at: IndexPath(row: 0, section: 0)) as? ImageGalleryCollectionViewCell)?.imageForCell
+    }
+    
     func documentChanged() {
         /** Autosave! Not Save Button **/
         document?.imageGallery = imageGallery
@@ -40,6 +44,12 @@ class ImageGalleryCollectionViewController: UICollectionViewController, UICollec
     }
     
     @IBAction func close(_ sender: UIBarButtonItem) {
+        documentChanged()
+        if document?.imageGallery != nil {
+            if let firstImage = firstImage?.snapshot {
+                document?.thumbnail = firstImage
+            }
+        }
         dismiss(animated: true) {
             self.document?.close()
         }

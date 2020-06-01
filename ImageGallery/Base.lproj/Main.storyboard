@@ -83,15 +83,10 @@
                         </connections>
                     </collectionView>
                     <navigationItem key="navigationItem" id="CFo-wQ-Q07">
-                        <barButtonItem key="leftBarButtonItem" width="40" systemItem="done" id="RKh-Hl-nRK">
+                        <barButtonItem key="rightBarButtonItem" width="40" systemItem="done" id="RKh-Hl-nRK">
                             <color key="tintColor" systemColor="systemBlueColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <connections>
                                 <action selector="close:" destination="aHt-nO-SUG" id="ive-ou-cyC"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="QsR-7L-e7y">
-                            <connections>
-                                <action selector="save:" destination="aHt-nO-SUG" id="hQS-Hb-bYk"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
